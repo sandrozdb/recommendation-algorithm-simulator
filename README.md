@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://recommendation-algorithm-simulator.vercel.app"><strong>Demo</strong></a> •
   <a href="https://github.com/sandrozdb"><strong>GitHub</strong></a> •
   <a href="https://linkedin.com/in/sandrozdb"><strong>LinkedIn</strong></a> •
   <a href="https://sandrozdb.com"><strong>Portfólio</strong></a> •
@@ -15,7 +16,7 @@ Simulador didático de sistemas de recomendação criado para tornar visível co
 
 A experiência foi inspirada em princípios que a **Netflix descreve publicamente** sobre personalização, mas os pesos, scores e regras desta aplicação são inteiramente educacionais e **não reproduzem o algoritmo real da Netflix**.
 
-> **Status:** MVP funcional, responsivo, sem backend e pronto para demonstração em navegador.
+> **Status:** MVP funcional, responsivo, sem backend e publicado na Vercel.
 
 > Projeto criado por **Sandro Ferreira** como apoio a uma apresentação executiva sobre algoritmos, comportamento e personalização.
 
@@ -38,7 +39,8 @@ O **Recommendation Lab** transforma o conceito em uma experiência interativa:
 
 ## Demo
 
-> O link público da Vercel será adicionado aqui após o primeiro deploy.
+**Aplicação publicada:**  
+[recommendation-algorithm-simulator.vercel.app](https://recommendation-algorithm-simulator.vercel.app)
 
 Para testar localmente, basta servir os arquivos estáticos:
 
