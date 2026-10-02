@@ -2,7 +2,14 @@
   <img src="assets/cover.svg" alt="Recommendation Lab — Simulador de Sistemas de Recomendação" width="100%">
 </p>
 
-# Recommendation Algorithm Simulator
+<p align="center">
+  <a href="https://github.com/sandrozdb"><strong>GitHub</strong></a> •
+  <a href="https://linkedin.com/in/sandrozdb"><strong>LinkedIn</strong></a> •
+  <a href="https://sandrozdb.com"><strong>Portfólio</strong></a> •
+  <a href="mailto:sandrozdb@gmail.com"><strong>E-mail</strong></a>
+</p>
+
+# Recommendation Lab — Recommendation Algorithm Simulator
 
 Simulador didático de sistemas de recomendação criado para tornar visível como **comportamentos geram sinais, sinais alteram scores e scores reorganizam rankings**.
 
@@ -187,8 +194,9 @@ O roteiro de 3 minutos para a demonstração está em [`docs/demo-script.md`](do
 Engenharia da Computação • IA • Dados • Automação
 
 - GitHub: [@sandrozdb](https://github.com/sandrozdb)
-- LinkedIn: [linkedin.com/in/sandroz](https://www.linkedin.com/in/sandroz)
+- LinkedIn: [linkedin.com/in/sandrozdb](https://linkedin.com/in/sandrozdb)
 - Portfólio: [sandrozdb.com](https://sandrozdb.com)
+- E-mail: [sandrozdb@gmail.com](mailto:sandrozdb@gmail.com)
 
 ---
 
