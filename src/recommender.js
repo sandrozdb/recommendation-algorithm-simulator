@@ -47,6 +47,14 @@ function getContent(contentId) {
   return CONTENT.find((item) => item.id === contentId);
 }
 
+function getConsumedContentIds(state) {
+  return new Set(
+    state.interactions
+      .filter((interaction) => interaction.type !== "seed")
+      .map((interaction) => interaction.contentId)
+  );
+}
+
 export function inferProfile(state) {
   const featureWeights = new Map();
   const genreWeights = new Map();
@@ -155,7 +163,11 @@ export function scoreContent(item, state, profile = inferProfile(state)) {
 
 export function rankContent(state) {
   const profile = inferProfile(state);
-  return CONTENT.map((item) => ({
+  const consumedIds = getConsumedContentIds(state);
+  const unseenContent = CONTENT.filter((item) => !consumedIds.has(item.id));
+  const rankingPool = unseenContent.length ? unseenContent : CONTENT;
+
+  return rankingPool.map((item) => ({
     item,
     score: scoreContent(item, state, profile)
   })).sort((a, b) => b.score.total - a.score.total);
