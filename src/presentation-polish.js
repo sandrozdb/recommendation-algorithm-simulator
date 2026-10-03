@@ -52,6 +52,11 @@ function labelColdStartSignals() {
   });
 }
 
+function syncOnboardingScrollMode() {
+  const onboarding = document.querySelector(".onboarding-shell");
+  document.body.classList.toggle("onboarding-scroll-lock", Boolean(onboarding));
+}
+
 function showRecalculatedBanner() {
   let banner = document.querySelector(".ranking-recalculated-banner");
   if (!banner) {
@@ -71,6 +76,7 @@ function showRecalculatedBanner() {
 }
 
 function polishPresentation() {
+  syncOnboardingScrollMode();
   updateHeroMessage();
   explainAffinityScale();
   labelColdStartSignals();
@@ -89,6 +95,21 @@ if (appRoot) {
   new MutationObserver(schedulePolish).observe(appRoot, { childList: true, subtree: true });
 }
 
+document.addEventListener("wheel", (event) => {
+  if (window.innerWidth <= 900) return;
+
+  const onboarding = document.querySelector(".onboarding-shell");
+  const seedPanel = onboarding?.querySelector(".seed-panel");
+  if (!onboarding || !seedPanel) return;
+
+  if (event.target instanceof Element && event.target.closest(".seed-panel")) return;
+  if (!event.deltaY) return;
+
+  const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+  seedPanel.scrollBy({ top: event.deltaY * multiplier, left: 0, behavior: "auto" });
+  event.preventDefault();
+}, { passive: false });
+
 document.addEventListener("click", (event) => {
   const target = event.target.closest("[data-action]");
   if (!target || target.dataset.action !== "interact") return;
@@ -97,5 +118,7 @@ document.addEventListener("click", (event) => {
     schedulePolish();
   }, 0);
 });
+
+window.addEventListener("resize", schedulePolish);
 
 schedulePolish();
