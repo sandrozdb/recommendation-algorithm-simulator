@@ -67,7 +67,8 @@ export function inferProfile(state) {
     });
 
     item.tags.forEach((tag) => {
-      featureWeights.set(`tag:${tag}`, (featureWeights.get(`tag:${tag}`) || 0) + weighted * 0.55);
+      const tagWeight = tag.startsWith("person:") ? 0.24 : 0.55;
+      featureWeights.set(`tag:${tag}`, (featureWeights.get(`tag:${tag}`) || 0) + weighted * tagWeight);
     });
 
     if (weighted > 0) {
@@ -129,10 +130,13 @@ export function scoreContent(item, state, profile = inferProfile(state)) {
 
   const watchedCount = state.interactions.filter((interaction) => interaction.contentId === item.id).length;
   const repetitionPenalty = Math.max(0, watchedCount - 1) * 3;
+  const seedPenalty = state.interactions.some(
+    (interaction) => interaction.contentId === item.id && interaction.type === "seed"
+  ) ? 16 : 0;
 
   const personalizationMultiplier = 1 - diversityFactor * 0.28;
   const total = clamp(
-    similarity * personalizationMultiplier + popularity + recency * personalizationMultiplier + exploration - penalty - repetitionPenalty,
+    similarity * personalizationMultiplier + popularity + recency * personalizationMultiplier + exploration - penalty - repetitionPenalty - seedPenalty,
     0,
     100
   );
@@ -144,7 +148,8 @@ export function scoreContent(item, state, profile = inferProfile(state)) {
     recency: recency * personalizationMultiplier,
     exploration,
     penalty,
-    repetitionPenalty
+    repetitionPenalty,
+    seedPenalty
   };
 }
 
