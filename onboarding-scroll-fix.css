@@ -1,0 +1,33 @@
+/* Onboarding scroll behavior: keep the left intro fixed, let the right panel scroll naturally, and avoid card/header overlap. */
+@media (min-width: 901px) {
+  .onboarding-shell {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .onboarding-intro {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .seed-panel {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scroll-behavior: auto;
+  }
+
+  /* The selection counter now scrolls with the catalog instead of floating over the cards. */
+  .seed-head {
+    position: relative !important;
+    top: auto !important;
+    z-index: 1 !important;
+    background: #080808 !important;
+  }
+
+  .seed-grid {
+    position: relative;
+    z-index: 0;
+  }
+}
