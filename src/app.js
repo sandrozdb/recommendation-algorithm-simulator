@@ -101,18 +101,18 @@ function header() {
 
 function renderOnboarding() {
   const ids = [
+    "lizzie-mcguire",
+    "lizzie-mcguire-movie",
+    "a-cinderella-story",
+    "younger",
+    "how-i-met-your-father",
+    "cheaper-by-the-dozen",
     "senna",
-    "drive-to-survive",
-    "beckham",
-    "stranger-things",
     "black-mirror",
     "bridgerton",
     "money-heist",
     "our-planet",
-    "wednesday",
-    "chefs-table",
-    "squid-game",
-    "dark"
+    "squid-game"
   ];
   const items = ids.map((id) => CONTENT.find((item) => item.id === id));
   return `
