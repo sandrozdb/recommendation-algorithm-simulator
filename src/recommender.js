@@ -119,22 +119,22 @@ export function scoreContent(item, state, profile = inferProfile(state)) {
     : 0;
 
   const similarityBase = clamp(genreScore * 0.75 + tagScore * 0.25, -1, 1);
-  const similarity = Math.max(0, similarityBase) * 58;
-  const penalty = Math.abs(Math.min(0, similarityBase)) * 35;
-  const popularity = (item.popularity / 100) * 20;
+  const rawSimilarity = Math.max(0, similarityBase) * 55;
+  const negativeAffinityPenalty = Math.abs(Math.min(0, similarityBase)) * 35;
+  const popularityRaw = (item.popularity / 100) * 20;
 
   const recentPositive = profile.positiveHistory.slice(-3);
   const recentMatches = recentPositive.reduce((sum, entry) => {
     const overlap = entry.item.genres.filter((genre) => item.genres.includes(genre)).length;
     return sum + (overlap > 0 ? 1 : 0);
   }, 0);
-  const recency = recentPositive.length ? (recentMatches / recentPositive.length) * 12 : 0;
+  const recencyRaw = recentPositive.length ? (recentMatches / recentPositive.length) * 10 : 0;
 
   const topGenres = new Set(profile.genres.filter((genre) => genre.value > 0).slice(0, 3).map((genre) => genre.name));
   const unknownGenres = item.genres.filter((genre) => !topGenres.has(genre)).length;
   const explorationBase = item.genres.length ? unknownGenres / item.genres.length : 0;
   const diversityFactor = clamp(state.diversity / 100, 0, 1);
-  const exploration = explorationBase * (5 + 20 * diversityFactor);
+  const explorationRaw = explorationBase * (3 + 12 * diversityFactor);
 
   const watchedCount = state.interactions.filter((interaction) => interaction.contentId === item.id).length;
   const repetitionPenalty = Math.max(0, watchedCount - 1) * 3;
@@ -143,19 +143,27 @@ export function scoreContent(item, state, profile = inferProfile(state)) {
   ) ? 16 : 0;
 
   const personalizationMultiplier = 1 - diversityFactor * 0.28;
-  const total = clamp(
-    similarity * personalizationMultiplier + popularity + recency * personalizationMultiplier + exploration - penalty - repetitionPenalty - seedPenalty,
+
+  // Para a demo, os quatro componentes abaixo são os únicos pontos visíveis do score.
+  // Penalidades ficam incorporadas em Similaridade para que o Total seja literalmente
+  // Similaridade + Popularidade + Recência + Exploração, sem ajustes escondidos.
+  const similarity = Math.round(clamp(
+    rawSimilarity * personalizationMultiplier - negativeAffinityPenalty - repetitionPenalty - seedPenalty,
     0,
-    100
-  );
+    55
+  ));
+  const popularity = Math.round(clamp(popularityRaw, 0, 20));
+  const recency = Math.round(clamp(recencyRaw * personalizationMultiplier, 0, 10));
+  const exploration = Math.round(clamp(explorationRaw, 0, 15));
+  const total = similarity + popularity + recency + exploration;
 
   return {
     total,
-    similarity: similarity * personalizationMultiplier,
+    similarity,
     popularity,
-    recency: recency * personalizationMultiplier,
+    recency,
     exploration,
-    penalty,
+    penalty: negativeAffinityPenalty,
     repetitionPenalty,
     seedPenalty
   };
