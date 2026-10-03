@@ -32,7 +32,18 @@ test("interações esportivas elevam títulos esportivos no ranking", () => {
   state = addInteraction(state, "senna", "love");
   state = addInteraction(state, "drive-to-survive", "finish");
   const topFive = rankContent(state).slice(0, 5).map(({ item }) => item.id);
-  assert.ok(topFive.some((id) => ["senna", "drive-to-survive", "beckham", "last-dance"].includes(id)));
+  assert.ok(topFive.some((id) => ["beckham", "last-dance"].includes(id)));
+});
+
+test("título que recebe novo sinal sai do ranking e dá lugar a outro conteúdo", () => {
+  let state = seedState(["lizzie-mcguire", "a-cinderella-story", "younger"]);
+  const firstRecommendation = rankContent(state)[0].item.id;
+
+  state = addInteraction(state, firstRecommendation, "finish");
+  const nextRanking = rankContent(state);
+
+  assert.ok(!nextRanking.some(({ item }) => item.id === firstRecommendation));
+  assert.notEqual(nextRanking[0].item.id, firstRecommendation);
 });
 
 test("controle de diversidade é limitado entre 0 e 100", () => {
