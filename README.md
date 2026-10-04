@@ -1,205 +1,279 @@
 <p align="center">
-  <img src="assets/cover.svg" alt="Recommendation Lab — Simulador de Sistemas de Recomendação" width="100%">
+  <img src="assets/cover.svg" alt="Recommendation Lab — Simulador didático de sistemas de recomendação" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://recommendation-algorithm-simulator.vercel.app"><strong>Demo</strong></a> •
-  <a href="https://github.com/sandrozdb"><strong>GitHub</strong></a> •
-  <a href="https://linkedin.com/in/sandrozdb"><strong>LinkedIn</strong></a> •
-  <a href="https://sandrozdb.com"><strong>Portfólio</strong></a> •
-  <a href="mailto:sandrozdb@gmail.com"><strong>E-mail</strong></a>
+  <a href="https://github.com/sandrozdb/recommendation-algorithm-simulator/actions/workflows/ci.yml"><img src="https://github.com/sandrozdb/recommendation-algorithm-simulator/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT License"></a>
+  <a href="https://recommendation-algorithm-simulator.vercel.app"><img src="https://img.shields.io/badge/demo-online-22c55e.svg" alt="Demo online"></a>
+  <img src="https://img.shields.io/badge/JavaScript-ES%20Modules-f7df1e.svg" alt="JavaScript ES Modules">
+</p>
+
+<p align="center">
+  <a href="https://recommendation-algorithm-simulator.vercel.app"><strong>Abrir demo</strong></a> ·
+  <a href="docs/architecture.md"><strong>Arquitetura</strong></a> ·
+  <a href="docs/methodology.md"><strong>Metodologia</strong></a> ·
+  <a href="docs/demo-script.md"><strong>Roteiro da demo</strong></a>
 </p>
 
 # Recommendation Lab — Recommendation Algorithm Simulator
 
-Simulador didático de sistemas de recomendação criado para tornar visível como **comportamentos geram sinais, sinais alteram scores e scores reorganizam rankings**.
+Simulador interativo que torna visível o ciclo de um sistema de recomendação: **comportamento gera sinais, sinais alteram o perfil inferido, o perfil altera scores e os scores reorganizam o ranking**.
 
-A experiência foi inspirada em princípios que a **Netflix descreve publicamente** sobre personalização, mas os pesos, scores e regras desta aplicação são inteiramente educacionais e **não reproduzem o algoritmo real da Netflix**.
+A aplicação foi criada para explicar recomendação e personalização de forma visual, sem depender de fórmulas abstratas durante uma apresentação. Ela se inspira em princípios descritos publicamente pela Netflix, mas **não reproduz algoritmos, pesos ou modelos proprietários**.
 
-> **Status:** MVP funcional, responsivo, sem backend e publicado na Vercel.
+> **Status:** demo funcional, responsiva, publicada na Vercel, com testes automatizados e execução 100% client-side.
 
-> Projeto criado por **Sandro Ferreira** como apoio a uma apresentação executiva sobre algoritmos, comportamento e personalização.
+## Demo ao vivo
 
-## Problema
+**https://recommendation-algorithm-simulator.vercel.app**
 
-Plataformas digitais precisam reduzir universos enormes de opções para pequenas listas relevantes. Para o usuário, a tela parece simples; por trás dela, sistemas observam sinais, estimam relevância, ordenam candidatos e aprendem com novas interações.
+O fluxo recomendado para testar é:
 
-O desafio deste projeto é explicar esse processo sem depender de fórmulas abstratas ou código complexo durante uma apresentação.
+1. escolha **3 títulos** no cold start;
+2. crie o primeiro ranking;
+3. abra uma recomendação e gere um novo sinal;
+4. observe outro conteúdo assumir o topo;
+5. abra o **Raio-X** para ver perfil, sinais e score;
+6. altere a diversidade para visualizar como mudar o objetivo muda o ranking.
 
-## Solução
+## O problema
 
-O **Recommendation Lab** transforma o conceito em uma experiência interativa:
+Plataformas digitais precisam transformar catálogos enormes em poucas opções relevantes para cada pessoa. Para quem usa o produto, a tela parece simples; por trás dela existe um ciclo de seleção, inferência, score, ordenação e aprendizado com novos sinais.
 
-1. o usuário escolhe três títulos para iniciar o perfil;
-2. o sistema cria um ranking inicial;
-3. ações como assistir, finalizar, gostar, amar, rejeitar ou abandonar viram sinais;
-4. o perfil de interesses é atualizado;
-5. o ranking é recalculado em tempo real;
-6. a tela **Raio-X** explica por que cada título ganhou determinada posição.
+O desafio deste projeto é tornar esse ciclo **observável e explicável**.
 
-## Demo
+## A solução
 
-**Aplicação publicada:**  
-[recommendation-algorithm-simulator.vercel.app](https://recommendation-algorithm-simulator.vercel.app)
-
-Para testar localmente, basta servir os arquivos estáticos:
-
-```bash
-npm run serve
-```
-
-ou abrir com qualquer servidor HTTP local.
-
-## Fluxo de funcionamento
+O Recommendation Lab implementa uma experiência didática completa:
 
 ```mermaid
 flowchart LR
-    A[Escolhas iniciais] --> B[Interações]
+    A[Escolhas iniciais] --> B[Cold start]
     B --> C[Perfil inferido]
     C --> D[Score]
     D --> E[Ranking]
     E --> F[Exibição]
-    F --> B
+    F --> G[Novo sinal]
+    G --> C
 ```
 
-A ideia central é simples:
+Depois que um título recebe um novo sinal, ele continua influenciando o perfil, mas sai do conjunto principal de candidatos. Assim, o sistema usa o que aprendeu com aquele comportamento para escolher **a próxima recomendação ainda não consumida**.
 
-> **Cada escolha também vira dado para a próxima escolha.**
+## Principais funcionalidades
 
-## Funcionalidades
-
-- cold start com escolha de três títulos;
-- ranking personalizado em tempo real;
-- ações positivas e negativas;
-- perfil de interesses inferido;
-- fileira baseada em similaridade;
-- fileira de exploração/diversidade;
-- botão **“Por que estou vendo isso?”**;
-- decomposição do score por componente;
-- tela **Raio-X do algoritmo**;
-- histórico de sinais;
-- controle de diversidade do ranking;
+- **cold start** com três escolhas iniciais;
+- primeiro ranking criado a partir desses sinais;
+- ações como `10 min`, `Até o fim`, `Gostei`, `Amei`, `Não é para mim` e `Abandonei`;
+- perfil de interesses inferido em escala relativa de **0 a 100**;
+- ranking recalculado após novos sinais;
+- indicador visual de títulos que subiram ou desceram posições;
+- remoção de títulos já consumidos do ranking principal;
+- explicação **“Por que estou vendo isso?”**;
+- tela **Raio-X** com decomposição do score;
+- histórico dos últimos sinais;
+- controle de diversidade entre afinidade e exploração;
 - persistência local no navegador;
-- botão para resetar a demonstração;
-- layout responsivo para desktop e mobile.
+- reset completo da demonstração;
+- layout adaptado para desktop, apresentações e telas menores.
 
-## Como o score didático funciona
+## Modelo didático de score
 
-Cada título recebe pontos a partir de quatro dimensões:
+O ranking usa quatro componentes visíveis. O **Total é literalmente a soma deles**:
 
-| Componente | Papel na simulação |
-|---|---|
-| Similaridade | Afinidade entre gêneros/tags do conteúdo e o perfil inferido |
-| Popularidade | Sinal global do título |
-| Recência | Reforço para interesses positivos recentes |
-| Exploração | Incentivo a conteúdos fora dos interesses dominantes |
+```text
+Total = Similaridade + Popularidade + Recência + Exploração
+```
 
-Sinais negativos podem reduzir a pontuação. O usuário pode aumentar ou reduzir a diversidade para visualizar como **mudar o objetivo muda o ranking**.
+| Componente | Faixa | O que representa |
+|---|---:|---|
+| **Similaridade** | 0–55 | afinidade entre gêneros/tags e o perfil inferido |
+| **Popularidade** | 0–20 | força global do título no catálogo didático |
+| **Recência** | 0–10 | proximidade com interesses positivos recentes |
+| **Exploração** | 0–15 | incentivo a conteúdos fora dos interesses dominantes |
+| **Total** | **0–100** | soma exata dos quatro componentes |
 
-> Os pesos são ilustrativos. O score não é uma probabilidade real de clique, visualização ou satisfação.
+Sinais negativos, repetição e escolhas iniciais podem reduzir a **Similaridade**. Essas penalidades ficam incorporadas nesse componente para que não existam ajustes escondidos depois da soma mostrada no Raio-X.
 
-## O que a Netflix divulga publicamente
+> O score é didático. Ele **não representa probabilidade real** de clique, visualização, retenção ou satisfação.
 
-Segundo a Central de Ajuda da Netflix, o sistema de recomendações considera fatores como:
+## Diversidade do ranking
 
-- interações com o serviço e histórico de visualização;
-- avaliações de títulos;
-- assinantes com gostos similares;
+O controle de diversidade permite demonstrar um ponto importante: **o mesmo perfil pode produzir rankings diferentes quando o objetivo do sistema muda**.
+
+- mais afinidade → prioriza conteúdos próximos ao padrão conhecido;
+- mais exploração → aceita mais variedade fora do padrão dominante.
+
+O perfil do usuário continua o mesmo; o que muda é a estratégia de ordenação.
+
+## O que é baseado em princípios públicos
+
+A documentação pública da Netflix descreve sinais como:
+
+- histórico e avaliações de títulos;
+- assinantes com gostos semelhantes;
 - gênero, categorias, atores e ano de lançamento;
 - horário de uso;
 - idioma preferido;
 - dispositivo;
-- duração assistida.
+- tempo assistido.
 
-A Netflix também informa que interações mais recentes tendem a influenciar mais as recomendações e que a página inicial pode personalizar **quais fileiras aparecem, quais títulos entram em cada fileira e a ordem desses títulos**.
+Ela também descreve escolhas iniciais para perfis novos, maior influência de interações recentes e personalização da seleção e da ordem de títulos.
 
-Fonte oficial: [Como funciona o sistema de recomendações da Netflix](https://help.netflix.com/pt/node/100639)
+**Fonte:** [Como funciona o sistema de recomendações da Netflix](https://help.netflix.com/pt/node/100639)
 
-## Limitações e disclaimer
+## O que é simulado
 
-Este projeto:
+Os seguintes elementos foram criados exclusivamente para fins educacionais:
 
-- não é afiliado, patrocinado ou endossado pela Netflix;
-- não reproduz código, modelos, pesos ou regras proprietárias da Netflix;
-- utiliza títulos conhecidos apenas como exemplos didáticos e não utiliza pôsteres oficiais;
-- não coleta dados em servidor;
-- não utiliza informações demográficas;
-- simplifica conceitos de recomendação para fins de apresentação e aprendizado.
+- pesos das interações;
+- fórmula e distribuição do score;
+- popularidade dos itens do catálogo;
+- regras de diversidade e exploração;
+- perfil inferido exibido no Raio-X;
+- artes visuais que representam os títulos.
+
+O projeto não é afiliado, patrocinado ou endossado pela Netflix.
+
+## Arquitetura
+
+A aplicação é **100% client-side**:
+
+```text
+Navegador
+│
+├── Catálogo e pesos             src/data.js
+├── Motor de recomendação        src/recommender.js
+├── Estado e interface           src/app.js
+├── Explicabilidade da demo      src/demo-enhancements.js
+├── Perfil 0–100                 src/profile-scale.js
+├── Acabamento de apresentação   src/presentation-polish.js
+├── Clareza do ranking           src/ranking-clarity.js
+├── UX do cold start             src/onboarding-scroll-fix.js
+└── Persistência local           localStorage
+```
+
+Não existe API, autenticação, banco de dados ou processamento no servidor.
+
+Detalhes: [`docs/architecture.md`](docs/architecture.md).
 
 ## Privacidade
 
-A aplicação não possui autenticação, banco de dados ou backend. As escolhas ficam somente no `localStorage` do navegador e podem ser apagadas a qualquer momento por **Resetar demo**.
+As interações ficam somente no `localStorage` do navegador. A aplicação não envia histórico de uso para um backend e o estado pode ser apagado pelo botão **Resetar demo**.
+
+## Decisões de projeto
+
+- **Sem backend:** reduz dependências e risco durante demonstrações ao vivo.
+- **Sem pôsteres oficiais:** evita depender de assets externos e mantém a identidade visual própria.
+- **Artes didáticas:** os títulos são identificáveis, mas a interface não tenta reproduzir o trade dress de uma plataforma comercial.
+- **Explicabilidade:** o Raio-X prioriza clareza sobre realismo algorítmico.
+- **Score transparente:** os números mostrados na tabela fecham matematicamente no total apresentado.
 
 ## Tecnologias
 
 | Tecnologia | Uso |
 |---|---|
-| HTML5 | Estrutura da aplicação |
-| CSS3 | Interface responsiva e visual do simulador |
-| JavaScript ES Modules | Estado, interações e renderização |
-| Node.js `node:test` | Testes automatizados da lógica |
-| Vercel | Hospedagem estática |
-| GitHub | Versionamento e documentação |
+| HTML5 | estrutura da aplicação |
+| CSS3 | interface, responsividade e experiência de apresentação |
+| JavaScript ES Modules | estado, renderização e motor de recomendação |
+| Node.js `node:test` | testes automatizados da lógica |
+| GitHub Actions | integração contínua |
+| Vercel | hospedagem estática |
 
-## Estrutura
+## Testes e qualidade
 
-```text
-recommendation-algorithm-simulator/
-├── index.html
-├── styles.css
-├── package.json
-├── vercel.json
-├── LICENSE
-├── .gitignore
-├── assets/
-│   ├── cover.svg
-│   └── favicon.svg
-├── src/
-│   ├── app.js
-│   ├── data.js
-│   └── recommender.js
-├── tests/
-│   └── recommender.test.mjs
-└── docs/
-    ├── architecture.md
-    ├── methodology.md
-    └── demo-script.md
-```
-
-## Testes
-
-A lógica principal possui testes com `node:test`.
+A suíte usa apenas `node:test`, sem dependências externas.
 
 ```bash
 npm test
 ```
 
-Os testes validam:
+Atualmente os testes validam:
 
-- inferência inicial de interesse;
-- efeito de sinal negativo;
-- alteração do ranking após interações;
+- inferência de interesse a partir do cold start;
+- efeito de sinais negativos;
+- influência de interações positivas no ranking;
+- saída de títulos já consumidos da próxima recomendação;
+- invariável `Total = Similaridade + Popularidade + Recência + Exploração`;
 - limites do controle de diversidade.
 
-## Roteiro de apresentação
+A workflow de **CI** executa os testes automaticamente em pushes e pull requests para `main`.
 
-O roteiro de 3 minutos para a demonstração está em [`docs/demo-script.md`](docs/demo-script.md).
+## Executar localmente
 
-## Arquitetura e metodologia
+Pré-requisitos:
 
-- [`docs/architecture.md`](docs/architecture.md) — arquitetura e componentes;
-- [`docs/methodology.md`](docs/methodology.md) — fidelidade conceitual, fonte pública e limitações.
+- navegador moderno;
+- Python 3 para o servidor estático do script abaixo.
+
+```bash
+git clone https://github.com/sandrozdb/recommendation-algorithm-simulator.git
+cd recommendation-algorithm-simulator
+npm run serve
+```
+
+Depois abra:
+
+```text
+http://localhost:4173
+```
+
+Para executar somente os testes:
+
+```bash
+npm test
+```
+
+## Estrutura do repositório
+
+```text
+recommendation-algorithm-simulator/
+├── .github/workflows/ci.yml
+├── assets/
+│   ├── cover.svg
+│   └── favicon.svg
+├── docs/
+│   ├── architecture.md
+│   ├── methodology.md
+│   └── demo-script.md
+├── src/
+│   ├── app.js
+│   ├── data.js
+│   ├── recommender.js
+│   ├── demo-enhancements.js
+│   ├── profile-scale.js
+│   ├── presentation-polish.js
+│   ├── ranking-clarity.js
+│   └── onboarding-scroll-fix.js
+├── tests/
+│   └── recommender.test.mjs
+├── index.html
+├── styles.css
+├── styles-enhancements.css
+├── presentation-polish.css
+├── onboarding-scroll-fix.css
+├── package.json
+├── vercel.json
+└── LICENSE
+```
+
+## Documentação
+
+- [`docs/architecture.md`](docs/architecture.md) — arquitetura, módulos e score;
+- [`docs/methodology.md`](docs/methodology.md) — base conceitual, limites e fidelidade;
+- [`docs/demo-script.md`](docs/demo-script.md) — roteiro curto para demonstração ao vivo.
+
+## Contexto do projeto
+
+O Recommendation Lab nasceu como apoio visual para uma apresentação sobre **algoritmos, comportamento e personalização**. A ideia foi transformar uma explicação conceitual em uma experiência que permitisse enxergar, ao vivo, como novos sinais alteram o que ganha visibilidade.
+
+## Licença
+
+Distribuído sob a licença MIT. Consulte [`LICENSE`](LICENSE).
 
 ## Autor
 
 **Sandro Ferreira**  
-Engenharia da Computação • IA • Dados • Automação
+Engenharia da Computação · IA · Dados · Automação
 
-- GitHub: [@sandrozdb](https://github.com/sandrozdb)
-- LinkedIn: [linkedin.com/in/sandrozdb](https://linkedin.com/in/sandrozdb)
-- Portfólio: [sandrozdb.com](https://sandrozdb.com)
-- E-mail: [sandrozdb@gmail.com](mailto:sandrozdb@gmail.com)
-
----
-
-Se este projeto te ajudou a entender sistemas de recomendação de forma mais concreta, deixe uma ⭐ no repositório.
+[LinkedIn](https://linkedin.com/in/sandrozdb) · [GitHub](https://github.com/sandrozdb) · [Portfólio](https://sandrozdb.com)
