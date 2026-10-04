@@ -46,6 +46,17 @@ test("título que recebe novo sinal sai do ranking e dá lugar a outro conteúdo
   assert.notEqual(nextRanking[0].item.id, firstRecommendation);
 });
 
+test("total é a soma exata dos quatro componentes visíveis", () => {
+  const state = seedState(["lizzie-mcguire", "a-cinderella-story", "younger"]);
+  const score = scoreContent(byId("bridgerton"), state);
+
+  assert.equal(
+    score.total,
+    score.similarity + score.popularity + score.recency + score.exploration
+  );
+  assert.ok(score.total >= 0 && score.total <= 100);
+});
+
 test("controle de diversidade é limitado entre 0 e 100", () => {
   let state = seedState(["senna"]);
   state = setDiversity(state, 150);
