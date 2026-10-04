@@ -1,51 +1,54 @@
 # Roteiro de demonstração — 3 minutos
 
-## 1. Cold start (30–40s)
+## 1. Cold start — 30 a 40s
 
-Diga:
+Abra a aplicação pelo botão **Resetar demo** e diga:
 
-> “Até aqui eu mostrei tudo isso em slides. Mas recomendação é muito mais fácil de entender quando a gente vê acontecendo. Então, em vez de só explicar, eu resolvi construir uma simulação.”
+> “Até aqui eu mostrei o conceito em slides. Mas recomendação fica muito mais fácil de entender quando a gente vê acontecendo. Então eu construí uma simulação.”
 
-Escolha três títulos, por exemplo:
+Escolha três títulos com alguma afinidade em comum e crie o feed.
 
-- Senna;
-- F1: Dirigir para Viver;
-- Beckham.
+Explique:
 
-Explique que a Netflix descreve um processo semelhante para iniciar recomendações de um perfil novo.
+> “Eu não declarei uma preferência em texto. O sistema recebeu apenas três escolhas iniciais e, a partir delas, criou o primeiro ranking.”
 
-## 2. Gere sinais (60s)
+## 2. Gere um novo sinal — 50 a 60s
 
-Abra 2 ou 3 títulos e faça ações como:
+Abra a primeira recomendação e escolha uma ação como **Até o fim**, **Gostei** ou **Amei**.
 
-- “Amei” em Senna;
-- “Até o fim” em F1;
-- “Gostei” em Beckham;
-- “Não é para mim” em Casamento às Cegas.
+Mostre o feedback visual de recálculo e diga:
 
-Diga:
+> “Agora entrou um novo sinal. Esse título alimenta o perfil inferido, sai da fila principal porque já foi consumido e outro conteúdo assume a recomendação.”
 
-> “Em nenhum momento eu escrevi ‘gosto de esporte’. O sistema está inferindo isso pelos sinais.”
+Se houver movimento no ranking, destaque que alguns títulos sobem e outros descem.
 
-## 3. Mostre o Raio-X (60s)
+## 3. Mostre o Raio-X — 60s
 
 Abra **Raio-X** e mostre:
 
-- gêneros com maior peso;
-- ranking atual;
-- decomposição do score;
-- últimas interações.
+- o perfil inferido em escala relativa de 0 a 100;
+- os últimos sinais, incluindo as escolhas de cold start;
+- o ranking atual;
+- os quatro componentes do score.
 
-Mova o controle de diversidade para mostrar que mudar o objetivo muda o ranking.
+Explique a fórmula:
 
-## 4. Volta para os slides (20–30s)
+```text
+Total = Similaridade + Popularidade + Recência + Exploração
+```
 
-Feche com:
+Reforce que o total é didático e não representa probabilidade real.
 
-> “O que acabamos de ver resume essa primeira parte: comportamento gera sinais, sinais alteram o ranking e o ranking altera aquilo que aparece para nós.”
+## 4. Mude o objetivo — 30s
 
-Depois:
+Mova o controle de diversidade e diga:
 
-> “Mas se o algoritmo aprende com o nosso comportamento… o nosso comportamento também aprende com aquilo que ele mostra?”
+> “O perfil do usuário não mudou. O que mudou foi o objetivo do ranking. Ao pedir mais diversidade, o sistema aceita explorar conteúdos um pouco mais fora do padrão já conhecido.”
 
-Volte ao PowerPoint e passe para a Duda.
+## 5. Fechamento — 20 a 30s
+
+> “O que acabamos de ver resume o ciclo: comportamento gera sinais, sinais alteram o perfil e o ranking, e o ranking altera aquilo que ganha visibilidade.”
+
+Feche com a provocação:
+
+> “Se o algoritmo aprende com o nosso comportamento, até que ponto o nosso comportamento também é influenciado por aquilo que ele escolhe mostrar?”
